@@ -1,6 +1,6 @@
 # MyClassHelp - Free Academic Assignment Formatter
 
-A privacy-focused, zero-dependency browser utility designed to help university students format raw essays and code drafts into strict academic standards with automated `.docx` exports.
+A zero-dependency, vanilla JavaScript client-side utility for formatting academic papers into strict APA 7th, MLA 9th, and Chicago documents with multi-format export (.doc, .html, Print/PDF).
 
 🔗 **Live Tool:** [https://myclasshelp.com/assignment-formatter/](https://myclasshelp.com/assignment-formatter/)  
 🌐 **Official Platform:** [https://myclasshelp.com](https://myclasshelp.com)
@@ -9,13 +9,21 @@ A privacy-focused, zero-dependency browser utility designed to help university s
 
 ## Key Features
 
-- **Multi-Format Support:** Easily format papers according to APA 7th Edition, MLA 9th Edition, Chicago Style, and IEEE standards.
-- **Client-Side & Privacy First:** Runs 100% locally in the browser—no text or assignment data is stored on external servers or processed through third-party LLMs.
-- **Direct DOCX Export:** Generates clean, ready-to-submit Microsoft Word (`.docx`) documents with auto-formatted header blocks, title pages, and citation spacing.
-- **Quick ISBN / DOI Lookup:** Instantly fetch and embed citations for standard sources.
+- **Multi-Format Support:** Format papers to the APA 7th Edition, MLA 9th Edition, and Chicago 17th Edition standards.
+- **Client-Side & Privacy First:** Runs 100% locally in the browser — no text or assignment data is stored on external servers or processed through third-party LLMs.
+- **Multi-Format Export:** Export your formatted document as a Word-readable `.doc`, a self-contained `.html` file, or print straight to PDF.
+- **Zero Dependencies:** Pure vanilla HTML, CSS, and JavaScript. No build step, no frameworks, no CDN scripts.
+
+---
+
+## Repository Contents
+
+- `index.html` — the UI structure.
+- `styles.css` — the styling (including the print/PDF rules).
+- `formatter.js` — the core formatting logic and export functions.
 
 ---
 
 ## Usage
 
-Access the full interactive tool directly at [myclasshelp.com/assignment-formatter/](https://myclasshelp.com/assignment-formatter/).
+Open `index.html` directly in any modern browser, or access the full interactive tool at [myclasshelp.com/assignment-formatter/](https://myclasshelp.com/assignment-formatter/).
