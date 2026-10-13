@@ -1,0 +1,166 @@
+<!DOCTYPE html>
+<!--
+  MyClassHelp — Free Academic Assignment Formatter
+  =================================================
+  A zero-dependency, vanilla JavaScript client-side utility that formats plain
+  text into strict APA 7th, MLA 9th, and Chicago document layouts and exports
+  them as .doc, .html, or Print/PDF.
+
+  There are NO external dependencies: no frameworks, no CDN scripts, no build
+  step. Just open this file in any modern browser (works from file://).
+-->
+<html lang="en">
+<head>
+  <meta charset="utf-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Free Academic Assignment Formatter — APA 7, MLA 9, Chicago</title>
+  <meta name="description"
+        content="Paste your essay and format it into strict APA 7th, MLA 9th, or Chicago layouts. Export as .doc, .html, or PDF. Free, private, zero-dependency." />
+
+  <!-- Single stylesheet. No CSS frameworks, no external fonts. -->
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+
+  <!-- ============================ HERO ============================ -->
+  <header class="site-hero">
+    <div class="wrap">
+      <h1>Format Your Assignment in Seconds</h1>
+      <p class="site-hero__subtitle">
+        Paste your essay, add your sources, and export a clean, standards-compliant
+        document. Free forever, no sign-up, and 100% private — everything runs in your browser.
+      </p>
+    </div>
+  </header>
+
+  <!-- ============================ TOOL ============================ -->
+  <main class="wrap tool">
+
+    <!-- ---------- LEFT / TOP: essay input ---------- -->
+    <section class="panel panel--input" aria-labelledby="input-heading">
+      <div class="panel__head">
+        <h2 id="input-heading" class="panel__title">Your Essay</h2>
+        <button type="button" id="clear-btn" class="btn btn--ghost">Clear</button>
+      </div>
+
+      <!-- Plain-text input. The parser also detects a pasted reference list. -->
+      <label class="visually-hidden" for="essay-body">Essay body text</label>
+      <textarea id="essay-body" class="textarea" rows="16"
+                placeholder="Paste or type your essay body here…&#10;&#10;Tip: include a line that says References, Works Cited, or Bibliography to separate your body from your source list."></textarea>
+      <p class="hint">
+        Paragraphs are separated by line breaks. Everything after a standalone
+        <em>References</em>, <em>Works Cited</em>, or <em>Bibliography</em> line is treated as your source list.
+      </p>
+    </section>
+    <!-- ---------- RIGHT / TOP: details, sources, format ---------- -->
+    <section class="panel panel--controls" aria-labelledby="controls-heading">
+      <h2 id="controls-heading" class="panel__title">Details &amp; Sources</h2>
+
+      <!-- Citation style selector -->
+      <div class="field">
+        <label for="format-select" class="field__label">Citation format</label>
+        <select id="format-select" class="input">
+          <option value="apa">APA 7th Edition</option>
+          <option value="mla">MLA 9th Edition</option>
+          <option value="chicago">Chicago 17th Edition</option>
+        </select>
+      </div>
+
+      <!-- Document details (title page / header block metadata) -->
+      <fieldset class="fieldset">
+        <legend class="field__label">Document details</legend>
+
+        <label class="visually-hidden" for="doc-title">Document title</label>
+        <input type="text" id="doc-title" class="input" placeholder="Document Title" />
+
+        <label class="visually-hidden" for="student-name">Student name</label>
+        <input type="text" id="student-name" class="input" placeholder="Student Name" />
+
+        <div class="field-row">
+          <label class="visually-hidden" for="course-name">Course name</label>
+          <input type="text" id="course-name" class="input" placeholder="Course Name" />
+
+          <label class="visually-hidden" for="instructor-name">Instructor name</label>
+          <input type="text" id="instructor-name" class="input" placeholder="Instructor Name" />
+        </div>
+
+        <label class="visually-hidden" for="doc-date">Date</label>
+        <input type="text" id="doc-date" class="input" placeholder="Date (e.g. October 14, 2026)" />
+      </fieldset>
+
+      <!-- Manual source entry -->
+      <fieldset class="fieldset">
+        <legend class="field__label">Add a source</legend>
+
+        <label class="visually-hidden" for="source-author">Author(s)</label>
+        <input type="text" id="source-author" class="input" placeholder="Author(s) — e.g. Smith, J.; Doe, A." />
+
+        <label class="visually-hidden" for="source-title">Title of work</label>
+        <input type="text" id="source-title" class="input" placeholder="Title of Work" />
+
+        <div class="field-row">
+          <label class="visually-hidden" for="source-year">Year</label>
+          <input type="text" id="source-year" class="input" placeholder="Year" />
+
+          <label class="visually-hidden" for="source-publisher">Publisher / journal</label>
+          <input type="text" id="source-publisher" class="input" placeholder="Publisher / Journal" />
+        </div>
+
+        <label class="visually-hidden" for="source-url">URL</label>
+        <input type="text" id="source-url" class="input" placeholder="URL (optional)" />
+
+        <button type="button" id="add-source-btn" class="btn btn--secondary">+ Add source</button>
+      </fieldset>
+
+      <!-- Source list -->
+      <div class="field">
+        <h3 class="field__label">Sources (<span id="source-count">0</span>)</h3>
+        <ul id="source-list" class="source-list"><!-- populated by formatter.js --></ul>
+      </div>
+    </section>
+    <!-- ---------- FULL WIDTH: live preview + export ---------- -->
+    <section class="panel panel--preview" aria-labelledby="preview-heading">
+      <div class="preview-bar">
+        <div class="preview-bar__left">
+          <h2 id="preview-heading" class="panel__title">Live Preview</h2>
+          <div class="stats" aria-live="polite">
+            <span class="stat"><strong id="stat-words">0</strong> words</span>
+            <span class="stat"><strong id="stat-pages">0</strong> est. pages</span>
+            <span class="stat"><strong id="stat-citations">0</strong> citations</span>
+          </div>
+        </div>
+
+        <!-- Export menu: .doc, .html, Print/PDF -->
+        <div class="export" id="export">
+          <button type="button" id="export-btn" class="btn btn--primary"
+                  aria-haspopup="true" aria-expanded="false">
+            Export &#9662;
+          </button>
+          <ul class="export-menu hidden" id="export-menu" role="menu" aria-label="Export options">
+            <li role="none"><button type="button" role="menuitem" class="export-menu__item" data-export="doc">Download .doc (Word)</button></li>
+            <li role="none"><button type="button" role="menuitem" class="export-menu__item" data-export="html">Download .html</button></li>
+            <li role="none"><button type="button" role="menuitem" class="export-menu__item" data-export="print">Print / Save as PDF</button></li>
+          </ul>
+        </div>
+      </div>
+
+      <!-- The "paper". formatter.js renders the formatted document into #doc-sheet. -->
+      <div class="preview-scroll">
+        <div id="doc-sheet" class="doc-sheet" data-format="apa" aria-live="polite" aria-label="Formatted document preview"></div>
+      </div>
+      <p class="hint">This is a live browser preview. Exports are formatted to strict academic standards.</p>
+    </section>
+
+  </main>
+
+  <!-- ============================ FOOTER ============================ -->
+  <footer class="site-footer">
+    <div class="wrap">
+      <p>100% private — your essay never leaves your browser. No sign-up, no tracking, no server.</p>
+    </div>
+  </footer>
+
+  <!-- Single script. No modules, no bundler — plain vanilla JavaScript. -->
+  <script src="formatter.js"></script>
+</body>
+</html>

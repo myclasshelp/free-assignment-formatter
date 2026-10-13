@@ -1,0 +1,458 @@
+/* =====================================================================
+   MyClassHelp — Free Academic Assignment Formatter
+   styles.css
+
+   Standalone, zero-dependency stylesheet. No frameworks, no external
+   fonts. Organised as:
+     1. Design tokens (CSS custom properties)
+     2. Base / reset
+     3. Hero + footer
+     4. Layout & panels
+     5. Form controls
+     6. Source list
+     7. Preview bar + export menu
+     8. The "paper" (.doc-sheet) — visual APA/MLA/Chicago layout
+     9. Print / PDF rules
+   ===================================================================== */
+
+/* ---------------------------------------------------------------------
+   1. DESIGN TOKENS
+   --------------------------------------------------------------------- */
+:root {
+  --bg:            #eef1f6;
+  --surface:       #ffffff;
+  --surface-soft:  #f7f8fb;
+  --text:          #1c2530;
+  --text-muted:    #5b6675;
+  --border:        #dbe2ea;
+  --primary:       #104189;
+  --primary-hover: #0c3168;
+  --accent:        #1f6feb;
+  --focus-ring:    rgba(16, 65, 137, 0.18);
+
+  --radius:   10px;
+  --radius-lg:16px;
+  --shadow:   0 8px 32px rgba(0, 0, 0, 0.06);
+
+  /* Serif stack mirrors the academic fonts used in the exported documents. */
+  --font-serif: "Times New Roman", "Liberation Serif", Georgia, serif;
+  --font-ui:    -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, Helvetica, Arial, sans-serif;
+}
+
+/* ---------------------------------------------------------------------
+   2. BASE / RESET
+   --------------------------------------------------------------------- */
+* { box-sizing: border-box; }
+
+html, body { margin: 0; padding: 0; }
+
+body {
+  background: var(--bg);
+  color: var(--text);
+  font-family: var(--font-ui);
+  font-size: 16px;
+  line-height: 1.6;
+  -webkit-font-smoothing: antialiased;
+}
+
+h1, h2, h3 { margin: 0 0 0.5em; line-height: 1.25; }
+
+p { margin: 0 0 1em; }
+
+a { color: var(--primary); }
+
+.wrap {
+  width: 100%;
+  max-width: 1160px;
+  margin: 0 auto;
+  padding: 0 1.25rem;
+}
+
+/* Utility: hide visually but keep available to screen readers. */
+.visually-hidden {
+  position: absolute;
+  width: 1px; height: 1px;
+  padding: 0; margin: -1px;
+  overflow: hidden;
+  clip: rect(0 0 0 0);
+  white-space: nowrap; border: 0;
+}
+
+.hidden { display: none !important; }
+
+/* ---------------------------------------------------------------------
+   3. HERO + FOOTER
+   --------------------------------------------------------------------- */
+.site-hero {
+  background: linear-gradient(135deg, var(--primary), #0a2a57);
+  color: #fff;
+  padding: 4.5rem 0 5.5rem;
+  text-align: center;
+}
+
+.site-hero h1 { font-size: clamp(1.7rem, 3.4vw, 2.6rem); }
+
+.site-hero__subtitle {
+  max-width: 780px;
+  margin: 0 auto;
+  color: rgba(255, 255, 255, 0.9);
+  font-size: 1.05rem;
+}
+
+.site-footer {
+  padding: 2rem 0 3rem;
+  text-align: center;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+}
+
+/* ---------------------------------------------------------------------
+   4. LAYOUT & PANELS
+   --------------------------------------------------------------------- */
+.tool {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1.5rem;
+  margin-top: -2.75rem;   /* pull the tool up over the hero */
+  position: relative;
+  z-index: 1;
+}
+
+.panel {
+  background: var(--surface);
+  border: 1px solid var(--border);
+  border-radius: var(--radius-lg);
+  padding: 1.5rem;
+  box-shadow: var(--shadow);
+}
+
+/* Preview spans the full width on its own row. */
+.panel--preview { grid-column: 1 / -1; }
+
+.panel__head {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+}
+
+.panel__title {
+  font-size: 1.15rem;
+  color: var(--text);
+}
+
+.hint {
+  margin: 0.6rem 0 0;
+  color: var(--text-muted);
+  font-size: 0.85rem;
+}
+
+@media (max-width: 860px) {
+  .tool { grid-template-columns: 1fr; }
+}
+/* ---------------------------------------------------------------------
+   5. FORM CONTROLS
+   --------------------------------------------------------------------- */
+.field { margin-bottom: 1.1rem; }
+
+.field__label {
+  display: block;
+  font-size: 0.85rem;
+  font-weight: 600;
+  color: var(--text);
+  margin-bottom: 0.35rem;
+}
+
+.fieldset {
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 0.9rem 1rem 1rem;
+  margin: 0 0 1.1rem;
+}
+
+.fieldset legend { padding: 0 0.4rem; }
+
+.field-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 0.6rem;
+  margin: 0.6rem 0;
+}
+
+.input,
+.textarea {
+  width: 100%;
+  font-family: var(--font-ui);
+  font-size: 0.92rem;
+  color: var(--text);
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.6rem 0.7rem;
+  transition: border-color 0.15s ease, box-shadow 0.15s ease, background 0.15s ease;
+}
+
+.fieldset .input { margin-bottom: 0.6rem; }
+.fieldset .input:last-of-type { margin-bottom: 0; }
+
+textarea.textarea {
+  min-height: 320px;
+  line-height: 1.75;
+  resize: vertical;
+}
+
+.input:focus,
+.textarea:focus {
+  outline: none;
+  border-color: var(--accent);
+  background: #fff;
+  box-shadow: 0 0 0 3px var(--focus-ring);
+}
+
+/* Buttons */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: 0.4rem;
+  font-family: inherit;
+  font-size: 0.9rem;
+  font-weight: 600;
+  line-height: 1;
+  padding: 0.6rem 0.95rem;
+  border-radius: 8px;
+  border: 1px solid transparent;
+  cursor: pointer;
+  transition: background 0.15s ease, border-color 0.15s ease, color 0.15s ease;
+}
+
+.btn--primary   { background: var(--primary); color: #fff; }
+.btn--primary:hover { background: var(--primary-hover); }
+
+.btn--secondary { background: var(--surface-soft); color: var(--primary); border-color: var(--border); }
+.btn--secondary:hover { background: #eaeef5; }
+
+.btn--ghost     { background: transparent; color: var(--text-muted); border-color: var(--border); padding: 0.4rem 0.7rem; }
+.btn--ghost:hover { color: var(--text); background: var(--surface-soft); }
+
+.btn:focus-visible { outline: 2px solid var(--accent); outline-offset: 2px; }
+
+/* ---------------------------------------------------------------------
+   6. SOURCE LIST
+   --------------------------------------------------------------------- */
+.source-list {
+  list-style: none;
+  margin: 0;
+  padding: 0;
+  display: flex;
+  flex-direction: column;
+  gap: 0.4rem;
+}
+
+.source-item {
+  display: flex;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 0.6rem;
+  background: var(--surface-soft);
+  border: 1px solid var(--border);
+  border-radius: 8px;
+  padding: 0.5rem 0.6rem;
+  font-size: 0.85rem;
+}
+
+.source-item__text { flex: 1; word-break: break-word; }
+
+.source-item__remove {
+  flex-shrink: 0;
+  border: 0;
+  background: transparent;
+  color: var(--text-muted);
+  font-size: 0.9rem;
+  line-height: 1;
+  cursor: pointer;
+  padding: 0.15rem 0.3rem;
+  border-radius: 6px;
+}
+
+.source-item__remove:hover { color: #b42318; background: #fdeceb; }
+
+/* ---------------------------------------------------------------------
+   7. PREVIEW BAR + EXPORT MENU
+   --------------------------------------------------------------------- */
+.preview-bar {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 1rem;
+  flex-wrap: wrap;
+  margin-bottom: 1rem;
+}
+
+.preview-bar__left { display: flex; align-items: baseline; gap: 0.75rem; flex-wrap: wrap; }
+.preview-bar__left .panel__title { margin-bottom: 0; }
+
+.stats { display: flex; gap: 0.9rem; color: var(--text-muted); font-size: 0.85rem; }
+.stats strong { color: var(--text); }
+
+.export { position: relative; }
+
+.export-menu {
+  position: absolute;
+  right: 0;
+  top: calc(100% + 0.4rem);
+  min-width: 220px;
+  list-style: none;
+  margin: 0;
+  padding: 0.35rem;
+  background: #fff;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  box-shadow: var(--shadow);
+  z-index: 20;
+}
+
+.export-menu__item {
+  display: block;
+  width: 100%;
+  text-align: left;
+  border: 0;
+  background: transparent;
+  font-family: inherit;
+  font-size: 0.9rem;
+  color: var(--text);
+  padding: 0.55rem 0.6rem;
+  border-radius: 6px;
+  cursor: pointer;
+}
+
+.export-menu__item:hover { background: var(--surface-soft); color: var(--primary); }
+/* ---------------------------------------------------------------------
+   8. THE "PAPER" (.doc-sheet)
+   Visual representation of the formatted document. Font size / line
+   height are set inline by formatter.js based on the selected style.
+   --------------------------------------------------------------------- */
+.preview-scroll {
+  background: #e6e9ef;
+  border: 1px solid var(--border);
+  border-radius: var(--radius);
+  padding: 1.25rem;
+  max-height: 640px;
+  overflow: auto;
+}
+
+.doc-sheet {
+  width: 8.5in;
+  max-width: 100%;
+  min-height: 11in;
+  margin: 0 auto;
+  padding: 1in;                       /* 1" page margins */
+  background: #fff;
+  color: #000;
+  font-family: var(--font-serif);
+  box-shadow: 0 2px 12px rgba(0, 0, 0, 0.14);
+}
+
+/* Title page (APA / Chicago) */
+.doc-titlepage { text-align: center; }
+.doc-titlepage .doc-title { margin-top: 2.5in; }
+
+.doc-title {
+  font-weight: 700;
+  font-size: inherit;
+  margin: 0 0 1.5em;
+}
+
+.doc-title--centered { text-align: center; }
+
+.doc-meta .doc-metaline { line-height: inherit; }
+
+/* MLA first-page header block (top-left, no title page) */
+.doc-mlaheader { margin-bottom: 1em; }
+.doc-mlaheader .doc-mlaline { line-height: inherit; }
+
+/* Body paragraph: 0.5in first-line indent, no extra space between */
+.doc-p {
+  margin: 0;
+  text-indent: 0.5in;
+}
+
+/* References heading: centered; bold for APA/Chicago, plain for MLA */
+.doc-heading {
+  text-align: center;
+  font-weight: 700;
+  font-size: inherit;
+  margin: 0 0 0.25em;
+}
+
+.doc-sheet[data-format="mla"] .doc-heading { font-weight: 400; }
+
+/* Reference entry: 0.5in hanging indent */
+.doc-ref {
+  margin: 0 0 0 0.5in;
+  text-indent: -0.5in;
+}
+
+/* Visual page divider in the on-screen preview */
+.doc-pagebreak {
+  border-top: 1px dashed #c9d2df;
+  margin: 1.25rem -1in;   /* bleed across the sheet padding */
+  height: 0;
+}
+
+/* ---------------------------------------------------------------------
+   9. PRINT / PDF RULES
+   When the user clicks "Print / Save as PDF", hide all app chrome and
+   print only the formatted sheet, paginated with real 1" margins.
+   --------------------------------------------------------------------- */
+@media print {
+  @page { size: 8.5in 11in; margin: 1in; }
+
+  body {
+    background: #fff !important;
+    font-family: var(--font-serif);
+  }
+
+  .site-hero,
+  .site-footer,
+  .panel--input,
+  .panel--controls,
+  .preview-bar,
+  .panel--preview > .hint { display: none !important; }
+
+  .tool { display: block; margin: 0; }
+
+  .panel,
+  .panel--preview {
+    border: 0 !important;
+    box-shadow: none !important;
+    padding: 0 !important;
+    margin: 0 !important;
+    background: transparent !important;
+  }
+
+  .preview-scroll {
+    background: transparent !important;
+    border: 0 !important;
+    padding: 0 !important;
+    max-height: none !important;
+    overflow: visible !important;
+  }
+
+  .doc-sheet {
+    width: auto !important;
+    min-height: 0 !important;
+    margin: 0 !important;
+    padding: 0 !important;      /* @page margin supplies the 1" */
+    box-shadow: none !important;
+  }
+
+  .doc-pagebreak {
+    border: 0 !important;
+    margin: 0 !important;
+    page-break-after: always;
+    break-after: page;
+  }
+}
+
+
